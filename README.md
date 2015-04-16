@@ -1,10 +1,10 @@
 This app is writen in python 2.7 and django 1.7
 
-1. Fake service has XML site (myhouse)
+1. Fake service has dumped data from database to XML and give it on site (myhouse)
 2. Apartment finder can read and add to database data from fake service (myhouse)
 3. Retrieve data from Otodom API
 4. This app can add data to own site
-5. Apartment finder can find duplicates ad.
+5. Apartment finder can find duplicate ads.
 6. App can search and sort ads.
 7. Hurrey!
 
