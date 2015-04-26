@@ -3,12 +3,15 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404, render
 from apartmentfinder.models import Home
+from apartmentfinder.models import Myhouse
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_xml.parsers import XMLParser
 from rest_framework_xml.renderers import XMLRenderer
-from apartmentfinder.serializers import homeSerializer
-
+from apartmentfinder.serializers import homeSerializer, MyhouseSerializer
+from lxml import etree
+from lxml import objectify
+from io import StringIO, BytesIO
 
 
 def index(request):
@@ -98,3 +101,8 @@ def home_detail(request, pk):
         dom.delete()
         return HttpResponse(status=204)
 
+def test(request):
+    # import pdb; pdb.set_trace()
+    all_houses = Myhouse.objects.all()
+    serializer = MyhouseSerializer(all_houses, many=True)
+    return XMLResponse(serializer.data)

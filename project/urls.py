@@ -19,5 +19,6 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/$', apartmentfinder.views.detail, name='detail'),
     url(r'^(?P<pk>[0-9]+)/export/$', apartmentfinder.views.home_detail, name='home_detail'),
     url(r'^export/$', apartmentfinder.views.home_list, name='home_list'),
+    url(r'^test/$', apartmentfinder.views.test, name='test'),
     
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
