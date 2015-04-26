@@ -12,6 +12,8 @@ from apartmentfinder.serializers import homeSerializer, MyhouseSerializer
 from lxml import etree
 from lxml import objectify
 from io import StringIO, BytesIO
+from django.core import serializers
+
 
 
 def index(request):
@@ -102,7 +104,5 @@ def home_detail(request, pk):
         return HttpResponse(status=204)
 
 def test(request):
-    # import pdb; pdb.set_trace()
-    all_houses = Myhouse.objects.all()
-    serializer = MyhouseSerializer(all_houses, many=True)
-    return XMLResponse(serializer.data)
+    data = serializers.serialize("xml", Myhouse.objects.all())
+    return HttpResponse(data, content_type='application/xml')
