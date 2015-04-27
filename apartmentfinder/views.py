@@ -14,6 +14,11 @@ from lxml import objectify
 from io import StringIO, BytesIO
 from django.core import serializers
 
+from django.shortcuts import render
+import xml.etree.ElementTree as ET
+import os
+from django.conf import settings
+import urllib
 
 
 def index(request):
@@ -69,9 +74,8 @@ def home_list(request):
         serializer = homeSerializer(table, many=True)
         return XMLResponse(serializer.data)
     if not request.GET.get('from_id'):
-        dom = Home.objects.all()
-        serializer = homeSerializer(dom, many=True)
-        return XMLResponse(serializer.data)
+        data = serializers.serialize("xml", Myhouse.objects.all())
+        return HttpResponse(data, content_type='application/xml')
 
 
 @csrf_exempt
@@ -104,5 +108,11 @@ def home_detail(request, pk):
         return HttpResponse(status=204)
 
 def test(request):
-    data = serializers.serialize("xml", Myhouse.objects.all())
-    return HttpResponse(data, content_type='application/xml')
+    # data = serializers.serialize("xml", Myhouse.objects.all())
+    # return HttpResponse(data, content_type='application/xml')
+    url = 'http://127.0.0.1:8001/export/'
+    root = ET.parse(urllib.urlopen(url)).getroot()
+    xmlfiledata = []
+    for items in root:
+        xmlfiledata.append({'id': items[0].text, 'tytul': items[1].text, 'opis': items[2].text, 'nazwa_dzielnicy': items[3].text, 'liczba_pokoi': items[4].text, 'cena': items[5].text, 'wspolrzedne_dl': items[6].text, 'wspolrzedne_szer': items[7].text, 'data_publikacji': items[8].text})
+    return render(request, 'apartmentfinder/aa.html', {'items' : xmlfiledata})
