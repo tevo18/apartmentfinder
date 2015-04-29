@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<link href="/static/css/bootstrap.css" media="all" rel="stylesheet" />
+<html>
+<head lang="pl">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<h1>Lista supermarketów we Wrocławiu:</h1>
+<a href="export/" class="btn btn-lg btn-danger" role="button">Export do XML</a>
+<a href="admin/" class="btn btn-lg btn-info" role="button">Admin panel</a>
+<div class="table-responsive">
+<table class="table table-hover">
+    <tr>
+        <td>Numer oferty</td>
+        <td>Nazwa dzielnicy</td>
+        <td>Opis</td>
+        <td>Zdjecie</td>
+        <td>Zobacz szczegóły</td>
+    </tr>
+    {% if shops %}
+    {% for supermarket in shops %}
+    <tr>
+        <td align="center" vertical-align: middle>{{ supermarket.id }}</td>
+        <td>{{ supermarket.nazwa_dzielnicy }}</td>
+        
+        <td>{{ supermarket.opis}}</td>
+        
+        <td><img src="../../media/{{ supermarket.zdjecie }}" alt="picture" class="img-thumbnail" height="140" width="140"></td>
+        <td><a href="/{{ supermarket.id  }}/" class="btn btn-info" role="button">Zobacz szczegóły</a></td>
+    </tr>
+{% endfor %}
+</table>
+</div>
+{% else %}
+    <p>Brak supermarketów w okolicy ;(</p>
+{% endif %}
+{#<div class="pagination">#}
+{#    <span class="step-links">#}
+{#        {% if shops.has_previous %}#}
+{#            <a href="?page={{ shops.previous_page_number }}">previous</a>#}
+{#        {% endif %}#}
+{##}
+{#        <span class="current">#}
+{#            Page {{ shops.number }} of {{ shops.paginator.num_pages }}.#}
+{#        </span>#}
+{##}
+{#        {% if shops.has_next %}#}
+{#            <a href="?page={{ shops.next_page_number }}">next</a>#}
+{#        {% endif %}#}
+{#    </span>#}
+{#</div>#}
+
+<nav>
+  <ul class="pagination">
+    <li>
+        {% if shops.has_previous %}
+          <a href="?page={{ shops.previous_page_number }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span> previous
+          </a>
+        {% endif %}
+        <span class="current" >
+            Page {{ shops.number }} of {{ shops.paginator.num_pages }}.
+        </span>
+
+        {% if shops.has_next %}
+          <a href="?page={{ shops.next_page_number }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span> next
+          </a>
+        {% endif %}
+
+    </li>
+  </ul>
+</nav>
+
+
+</body>
+</html>
+

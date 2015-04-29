@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+{#<head lang="pl">#}
+{#    <meta charset="UTF-8">#}
+{#    <link href="/static/css/bootstrap.css" media="all" rel="stylesheet" />#}
+{#    <title>Oferta mieszkania numer: {{ shop_detail.id }} </title>#}
+{#</head>#}
+  <head>
+      <title>Oferta mieszkania numer: {{ shop_detail.id }} </title>
+      <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+      <link href="/static/css/bootstrap.css" media="all" rel="stylesheet" />
+    <meta charset="utf-8">
+    <style>
+      html, body, #map-canvas {
+        height: 80%;
+        margin: 20px;
+        padding: 0px
+      }
+    </style>
+    <script src="/static/js/google_maps.js"></script>
+    <script>
+function initialize() {
+  var mapOptions = {
+    zoom: 4,
+    center: new google.maps.LatLng({{ shop_detail.wspolrzedne_szer |stringformat:"f" }}, {{ shop_detail.wspolrzedne_dl |stringformat:"f" }})
+  };
+
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+  var marker = new google.maps.Marker({
+    position: map.getCenter(),
+    map: map,
+    title: 'Click to zoom'
+  });
+
+  google.maps.event.addListener(map, 'center_changed', function() {
+    // 3 seconds after the center of the map has changed, pan back to the
+    // marker.
+    window.setTimeout(function() {
+      map.panTo(marker.getPosition());
+    }, 3000);
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    map.setZoom(8);
+    map.setCenter(marker.getPosition());
+  });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+<body>
+<div class="col-md-8" align="center" id="map-canvas"></div>
+
+    <div class="col-ld-12" align="center"><h1>{{ shop_detail.tytul }}</h1></div>
+    <div class="container">
+            <div class="row" align="center">
+                <div class="col-md-6"><img src="../../media/{{ shop_detail.zdjecie }}" ></div>
+               
+                <div class="col-md-6"><h2>Nazwa dzielnicy: </h2> <p>{{ shop_detail.nazwa_dzielnicy }}</p></div>
+      
+                
+                <div class="col-md-6"><h2>Opis:</h2> <p>{{ shop_detail.opis }}</p></div>
+                <div class="col-md-6"><h2>Wspolrzedne szerokość (dla nas):</h2> <p>{{ shop_detail.wspolrzedne_szer }}</p></div>
+                <div class="col-md-6"><h2>Wspolrzedne dlugość (dla nas):</h2> <p>{{ shop_detail.wspolrzedne_dl }}</p></div>
+                <p>Chcesz zobaczyć mieszkanie?<br> Skontaktuj się z nami!</p>
+                <button type="button" class="btn btn-lg btn-primary">Kontakt</button>
+                <a href="export/" class="btn btn-lg btn-danger" role="button">Export do XML</a>
+                <a href="/" class="btn btn-lg btn-success" role="button">Strona główna</a>
+            </div>
+    <footer class="footer" >
+        <p>&copy; Company 2014</p>
+      </footer>
+    </div>
+
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<link href="/static/css/bootstrap.css" media="all" rel="stylesheet" />
+<html>
+<head lang="pl">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<h1>Lista ostatnio dodanych domów na sprzedaż:</h1>
+<a href="export/" class="btn btn-lg btn-danger" role="button">Export do XML</a>
+<a href="admin/" class="btn btn-lg btn-info" role="button">Admin panel</a>
+<div class="table-responsive">
+<table class="table table-hover">
+    <tr>
+        <td>Numer oferty</td>
+        <td>Nazwa dzielnicy</td>
+        <td>Liczba pokoi</td>
+        <td>Opis</td>
+        <td>Cena</td>
+        <td>Zdjecie</td>
+        <td>Zobacz szczegóły</td>
+    </tr>
+    {% if homes %}
+    {% for home in homes %}
+    <tr>
+        <td align="center" vertical-align: middle>{{ home.id }}</td>
+        <td>{{ home.nazwa_dzielnicy }}</td>
+        <td>{{ home.liczba_pokoi }}</td>
+        <td>{{ home.opis}}</td>
+        <td>{{ home.cena }}</td>
+        <td><img src="../../media/{{ home.zdjecie }}" alt="picture" class="img-thumbnail" height="140" width="140"></td>
+        <td><a href="/{{ home.id  }}/" class="btn btn-info" role="button">Zobacz szczegóły</a></td>
+    </tr>
+{% endfor %}
+</table>
+</div>
+{% else %}
+    <p>Brak jakis domków na sprzedaż ;(</p>
+{% endif %}
+{#<div class="pagination">#}
+{#    <span class="step-links">#}
+{#        {% if homes.has_previous %}#}
+{#            <a href="?page={{ homes.previous_page_number }}">previous</a>#}
+{#        {% endif %}#}
+{##}
+{#        <span class="current">#}
+{#            Page {{ homes.number }} of {{ homes.paginator.num_pages }}.#}
+{#        </span>#}
+{##}
+{#        {% if homes.has_next %}#}
+{#            <a href="?page={{ homes.next_page_number }}">next</a>#}
+{#        {% endif %}#}
+{#    </span>#}
+{#</div>#}
+
+<nav>
+  <ul class="pagination">
+    <li>
+        {% if homes.has_previous %}
+          <a href="?page={{ homes.previous_page_number }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span> previous
+          </a>
+        {% endif %}
+        <span class="current" >
+            Page {{ homes.number }} of {{ homes.paginator.num_pages }}.
+        </span>
+
+        {% if homes.has_next %}
+          <a href="?page={{ homes.next_page_number }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span> next
+          </a>
+        {% endif %}
+
+    </li>
+  </ul>
+</nav>
+
+
+</body>
+</html>
+
