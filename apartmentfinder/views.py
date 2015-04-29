@@ -9,17 +9,14 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework_xml.parsers import XMLParser
 from rest_framework_xml.renderers import XMLRenderer
 from apartmentfinder.serializers import homeSerializer, MyhouseSerializer
-from lxml import etree
-from lxml import objectify
-from io import StringIO, BytesIO
 from django.core import serializers
 
 from django.shortcuts import render
 import xml.etree.ElementTree as ET
-import os
-from django.conf import settings
 import urllib
 
+
+from data_importer.importers import XMLImporter
 
 def index(request):
     home_list = Home.objects.all().order_by('-data_publikacji')
@@ -110,9 +107,20 @@ def home_detail(request, pk):
 def test(request):
     # data = serializers.serialize("xml", Myhouse.objects.all())
     # return HttpResponse(data, content_type='application/xml')
-    url = 'http://127.0.0.1:8001/export/'
+    url = 'http://127.0.0.1:8000/export/'
     root = ET.parse(urllib.urlopen(url)).getroot()
     xmlfiledata = []
     for items in root:
-        xmlfiledata.append({'id': items[0].text, 'tytul': items[1].text, 'opis': items[2].text, 'nazwa_dzielnicy': items[3].text, 'liczba_pokoi': items[4].text, 'cena': items[5].text, 'wspolrzedne_dl': items[6].text, 'wspolrzedne_szer': items[7].text, 'data_publikacji': items[8].text})
-    return render(request, 'apartmentfinder/aa.html', {'items' : xmlfiledata})
+        xmlfiledata.append({ 'id': items[0].text,
+                             'tytul': items[1].text,
+                             'opis': items[2].text,
+                             'nazwa_dzielnicy': items[3].text,
+                             'liczba_pokoi': items[4].text,
+                             'cena': items[5].text,
+                             'wspolrzedne_dl': items[6].text,
+                             'wspolrzedne_szer': items[7].text,
+                             'data_publikacji': items[8].text,
+                             'zdjecie': items[9].text},
+                            )
+    return render(request, 'apartmentfinder/test.html', {'items' : xmlfiledata})
+
